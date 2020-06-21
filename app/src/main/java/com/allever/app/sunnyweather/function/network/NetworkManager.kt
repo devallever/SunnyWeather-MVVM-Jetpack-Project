@@ -13,6 +13,14 @@ object NetworkManager {
 
     suspend fun searchPlaces(query: String) = mPlaceService.searchPlaces(query).result()
 
+    private val mWeatherService = ServiceCreator.create<WeatherService>()
+
+    suspend fun getRealtimeWeather(lng: String, lat: String) =
+        mWeatherService.getRealtimeWeather(lng, lat).result()
+
+    suspend fun getDailyWeather(lng: String, lat: String) =
+        mWeatherService.getDailyWeather(lng, lat).result()
+
     private suspend fun <T> Call<T>.result(): T {
         return suspendCoroutine { continuation ->
             enqueue(object : Callback<T> {

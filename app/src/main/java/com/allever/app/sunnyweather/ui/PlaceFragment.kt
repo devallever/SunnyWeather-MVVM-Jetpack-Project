@@ -1,8 +1,6 @@
 package com.allever.app.sunnyweather.ui
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_place.*
 
 class PlaceFragment : BaseFragment() {
 
-    val viewModel by lazy {
+    private val mViewModel by lazy {
         ViewModelProvider(this).get(PlaceViewModel::class.java)
     }
 
@@ -37,27 +35,27 @@ class PlaceFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         rvPlaceList.layoutManager = LinearLayoutManager(activity)
-        mAdapter = PlaceAdapter(activity!!, R.layout.item_place, viewModel.placeList)
+        mAdapter = PlaceAdapter(activity!!, R.layout.item_place, mViewModel.placeList)
         rvPlaceList.adapter = mAdapter
         etSearchPlace.addTextChangedListener { editable ->
             val content = editable.toString()
             if (content.isNotEmpty()) {
-                viewModel.searchPlaces(content)
+                mViewModel.searchPlaces(content)
             } else {
                 rvPlaceList.visibility = View.GONE
                 ivBg.visibility = View.VISIBLE
-                viewModel.placeList.clear()
+                mViewModel.placeList.clear()
                 mAdapter.notifyDataSetChanged()
             }
         }
 
-        viewModel.placeLiveData.observe(this as LifecycleOwner, Observer {result ->
+        mViewModel.placeLiveData.observe(this as LifecycleOwner, Observer { result ->
             val places = result.getOrNull()
             if (places != null) {
                 rvPlaceList.visibility = View.VISIBLE
                 ivBg.visibility = View.GONE
-                viewModel.placeList.clear()
-                viewModel.placeList.addAll(places)
+                mViewModel.placeList.clear()
+                mViewModel.placeList.addAll(places)
                 mAdapter.notifyDataSetChanged()
             } else {
                 toast("未能查到任何地点")
