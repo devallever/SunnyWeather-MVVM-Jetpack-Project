@@ -5,7 +5,7 @@ import com.allever.lib.common.app.App
 class MyApp : App() {
 
     companion object {
-        const val TOKEN = "X"
+        const val TOKEN = "8dJHsGRBIzDL0bmv"
     }
 
     override fun onCreate() {
