@@ -5,10 +5,10 @@ import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
 import android.view.View
-import com.allever.android.app.MyFragment
+import androidx.fragment.app.Fragment
 import com.allever.lib.common.util.DLog
 
-open class BaseFragment : MyFragment() {
+open class BaseFragment : Fragment() {
     protected val mHandler = Handler(Looper.getMainLooper())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
