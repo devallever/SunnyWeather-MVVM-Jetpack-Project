@@ -3,6 +3,9 @@ package com.allever.app.sunnyweather.function.network
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/***
+ * https://dashboard.caiyunapp.com/user/user/info/
+ */
 object ServiceCreator {
 
     private const val BASE_URL = "https://api.caiyunapp.com/"

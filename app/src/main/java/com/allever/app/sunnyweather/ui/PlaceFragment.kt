@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -38,32 +39,24 @@ class PlaceFragment : BaseFragment() {
         rvPlaceList.layoutManager = LinearLayoutManager(activity)
         mAdapter = PlaceAdapter(activity!!, R.layout.item_place, viewModel.placeList)
         rvPlaceList.adapter = mAdapter
-        etSearchPlace.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                val content = editable?.toString()
-                if (content?.isNotEmpty() == true) {
-                    viewModel.searchPlaces(content)
-                } else {
-                    rvPlaceList.visibility = View.GONE
-                    ivBg.visibility = View.VISIBLE
-                    viewModel.placeList.clear()
-                    mAdapter.notifyDataSetChanged()
-                }
+        etSearchPlace.addTextChangedListener { editable ->
+            val content = editable.toString()
+            if (content.isNotEmpty()) {
+                viewModel.searchPlaces(content)
+            } else {
+                rvPlaceList.visibility = View.GONE
+                ivBg.visibility = View.VISIBLE
+                viewModel.placeList.clear()
+                mAdapter.notifyDataSetChanged()
             }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-        })
+        }
 
         viewModel.placeLiveData.observe(this as LifecycleOwner, Observer {result ->
             val places = result.getOrNull()
             if (places != null) {
                 rvPlaceList.visibility = View.VISIBLE
                 ivBg.visibility = View.GONE
+                viewModel.placeList.clear()
                 viewModel.placeList.addAll(places)
                 mAdapter.notifyDataSetChanged()
             } else {
