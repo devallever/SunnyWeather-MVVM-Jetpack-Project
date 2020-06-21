@@ -11,7 +11,7 @@ object NetworkManager {
 
     private val mPlaceService = ServiceCreator.create<PlaceService>()
 
-    suspend fun searchPlaces(place: String) = mPlaceService.searchPlaces(place).result()
+    suspend fun searchPlaces(query: String) = mPlaceService.searchPlaces(query).result()
 
     private suspend fun <T> Call<T>.result(): T {
         return suspendCoroutine { continuation ->
