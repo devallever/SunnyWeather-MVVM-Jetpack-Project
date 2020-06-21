@@ -9,13 +9,13 @@ import retrofit2.http.Path
 
 interface WeatherService {
 
-    @GET("V2.5/${MyApp.TOKEN}/{lng},{lat}/realtime.json")
+    @GET("v2.5/${MyApp.TOKEN}/{lng},{lat}/realtime.json")
     fun getRealtimeWeather(
         @Path("lng") lng: String,
         @Path("lat") lat: String
     ): Call<RealtimeResponse>
 
-    @GET("V2.5/${MyApp.TOKEN}/{lng},{lat}/daily.json")
+    @GET("v2.5/${MyApp.TOKEN}/{lng},{lat}/daily.json")
     fun getDailyWeather(
         @Path("lng") lng: String,
         @Path("lat") lat: String
