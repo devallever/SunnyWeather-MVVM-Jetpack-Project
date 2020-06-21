@@ -13,6 +13,8 @@ import com.allever.app.sunnyweather.R
 import com.allever.app.sunnyweather.ui.adapter.PlaceAdapter
 import com.allever.app.sunnyweather.ui.viewmodel.PlaceViewModel
 import com.allever.lib.common.app.BaseFragment
+import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
+import com.allever.lib.common.ui.widget.recycler.ItemListener
 import com.allever.lib.common.util.toast
 import kotlinx.android.synthetic.main.fragment_place.*
 
@@ -62,5 +64,13 @@ class PlaceFragment : BaseFragment() {
                 result.exceptionOrNull()?.printStackTrace()
             }
         })
+
+        mAdapter.mItemListener = object : ItemListener {
+            override fun onItemClick(position: Int, holder: BaseViewHolder) {
+                val place = mViewModel.placeList[position]
+                val location = place.location
+                WeatherActivity.start(activity, location.lng, location.lat, place.name)
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.allever.app.sunnyweather.function.network
 
+import com.allever.lib.common.util.log
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,6 +30,7 @@ object NetworkManager {
                     if (body != null) {
                         continuation.resume(body)
                     } else {
+                        log("$response")
                         continuation.resumeWithException(RuntimeException("response body is null"))
                     }
                 }
