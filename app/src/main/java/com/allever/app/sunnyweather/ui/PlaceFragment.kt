@@ -36,6 +36,15 @@ class PlaceFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        if (mViewModel.isPlaceSaved()) {
+            val place = mViewModel.getSavedPlace()
+            val location = place.location
+            WeatherActivity.start(activity, location.lng, location.lat, place.name)
+            activity?.finish()
+            return
+        }
+
         rvPlaceList.layoutManager = LinearLayoutManager(activity)
         mAdapter = PlaceAdapter(activity!!, R.layout.item_place, mViewModel.placeList)
         rvPlaceList.adapter = mAdapter
@@ -70,6 +79,8 @@ class PlaceFragment : BaseFragment() {
                 val place = mViewModel.placeList[position]
                 val location = place.location
                 WeatherActivity.start(activity, location.lng, location.lat, place.name)
+                mViewModel.savePlace(place)
+                activity?.finish()
             }
         }
     }
