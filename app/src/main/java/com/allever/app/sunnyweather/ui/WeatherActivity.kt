@@ -51,11 +51,20 @@ class WeatherActivity : BaseActivity() {
                 result.exceptionOrNull()?.printStackTrace()
                 tvWeatherResult.text = result.exceptionOrNull()?.message
             }
+            swipeRefreshLayout.isRefreshing = false
         })
 
-        mViewModel.refreshWeather(mViewModel.lng, mViewModel.lat)
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
+        refreshWeather()
 
+        swipeRefreshLayout.setOnRefreshListener {
+            refreshWeather()
+        }
     }
 
+    private fun refreshWeather() {
+        mViewModel.refreshWeather(mViewModel.lng, mViewModel.lat)
+        swipeRefreshLayout.isRefreshing = true
+    }
 
 }
