@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.allever.app.sunnyweather.function.Repository
 import com.allever.app.sunnyweather.function.model.Location
 
-class WeatherViewModel: ViewModel() {
+class WeatherViewModel : ViewModel() {
 
     private val locationLiveData = MutableLiveData<Location>()
 

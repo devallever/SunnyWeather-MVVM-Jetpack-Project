@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.allever.app.sunnyweather.function.Repository
 import com.allever.app.sunnyweather.function.model.Place
 
-class PlaceViewModel: ViewModel() {
+class PlaceViewModel : ViewModel() {
 
     private val searchLiveData = MutableLiveData<String>()
 

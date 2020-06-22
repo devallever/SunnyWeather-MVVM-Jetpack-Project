@@ -59,7 +59,7 @@ object Repository {
         }
     }
 
-    fun savePlace(place: Place)  = PlaceDao.savePlace(place)
+    fun savePlace(place: Place) = PlaceDao.savePlace(place)
 
     fun getSavedPlace(): Place = PlaceDao.getSavedPlace()
 
