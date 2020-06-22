@@ -1,6 +1,7 @@
 package com.allever.app.sunnyweather.function
 
 import androidx.lifecycle.liveData
+import com.allever.app.sunnyweather.function.dao.PlaceDao
 import com.allever.app.sunnyweather.function.model.Place
 import com.allever.app.sunnyweather.function.model.Weather
 import com.allever.app.sunnyweather.function.network.NetworkManager
@@ -57,6 +58,12 @@ object Repository {
             }
         }
     }
+
+    fun savePlace(place: Place)  = PlaceDao.savePlace(place)
+
+    fun getSavedPlace(): Place = PlaceDao.getSavedPlace()
+
+    fun isPlaceSaved(): Boolean = PlaceDao.isPlaceSaved()
 
     private fun <T> fire(context: CoroutineContext, block: suspend () -> Result<T>) =
         liveData<Result<T>>(context) {
