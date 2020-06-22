@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.allever.app.sunnyweather.MainActivity
 import com.allever.app.sunnyweather.R
 import com.allever.app.sunnyweather.ui.adapter.PlaceAdapter
 import com.allever.app.sunnyweather.ui.viewmodel.PlaceViewModel
@@ -16,6 +17,7 @@ import com.allever.lib.common.app.BaseFragment
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
 import com.allever.lib.common.ui.widget.recycler.ItemListener
 import com.allever.lib.common.util.toast
+import kotlinx.android.synthetic.main.activity_weather.*
 import kotlinx.android.synthetic.main.fragment_place.*
 
 class PlaceFragment : BaseFragment() {
@@ -37,7 +39,7 @@ class PlaceFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (mViewModel.isPlaceSaved()) {
+        if (activity is MainActivity && mViewModel.isPlaceSaved()) {
             val place = mViewModel.getSavedPlace()
             val location = place.location
             WeatherActivity.start(activity, location.lng, location.lat, place.name)
@@ -78,9 +80,19 @@ class PlaceFragment : BaseFragment() {
             override fun onItemClick(position: Int, holder: BaseViewHolder) {
                 val place = mViewModel.placeList[position]
                 val location = place.location
-                WeatherActivity.start(activity, location.lng, location.lat, place.name)
+
+                if (activity is WeatherActivity) {
+                    val weatherActivity = activity as WeatherActivity
+                    weatherActivity.drawerLayout?.closeDrawers()
+                    weatherActivity.viewModel.lng = location.lng
+                    weatherActivity.viewModel.lat = location.lat
+                    weatherActivity.viewModel.placeName = place.name
+                    weatherActivity.refreshWeather()
+                } else {
+                    WeatherActivity.start(activity, location.lng, location.lat, place.name)
+                    activity?.finish()
+                }
                 mViewModel.savePlace(place)
-                activity?.finish()
             }
         }
     }

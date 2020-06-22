@@ -3,13 +3,15 @@ package com.allever.app.sunnyweather.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.allever.app.sunnyweather.R
 import com.allever.app.sunnyweather.ui.viewmodel.WeatherViewModel
 import com.allever.lib.common.app.BaseActivity
 import kotlinx.android.synthetic.main.activity_weather.*
-import kotlin.math.ln
 
 class WeatherActivity : BaseActivity() {
 
@@ -23,7 +25,7 @@ class WeatherActivity : BaseActivity() {
         }
     }
 
-    private val mViewModel by lazy {
+    val viewModel by lazy {
         ViewModelProvider(this).get(WeatherViewModel::class.java)
     }
 
@@ -31,19 +33,19 @@ class WeatherActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather)
 
-        if (mViewModel.lng.isEmpty()) {
-            mViewModel.lng = intent.getStringExtra("lng") ?: ""
+        if (viewModel.lng.isEmpty()) {
+            viewModel.lng = intent.getStringExtra("lng") ?: ""
         }
 
-        if (mViewModel.lat.isEmpty()) {
-            mViewModel.lat = intent.getStringExtra("lat") ?: ""
+        if (viewModel.lat.isEmpty()) {
+            viewModel.lat = intent.getStringExtra("lat") ?: ""
         }
 
-        if (mViewModel.placeName.isEmpty()) {
-            mViewModel.placeName = intent.getStringExtra("place") ?: ""
+        if (viewModel.placeName.isEmpty()) {
+            viewModel.placeName = intent.getStringExtra("place") ?: ""
         }
 
-        mViewModel.weatherLiveData.observe(this, Observer { result ->
+        viewModel.weatherLiveData.observe(this, Observer { result ->
             val weather = result.getOrNull()
             if (weather != null) {
                 tvWeatherResult.text = weather.toString()
@@ -60,10 +62,29 @@ class WeatherActivity : BaseActivity() {
         swipeRefreshLayout.setOnRefreshListener {
             refreshWeather()
         }
+
+        drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+
+            override fun onDrawerClosed(drawerView: View) {
+                val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(
+                    drawerView.windowToken,
+                    InputMethodManager.HIDE_NOT_ALWAYS
+                )
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {}
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+            override fun onDrawerOpened(drawerView: View) {}
+
+        })
+
     }
 
-    private fun refreshWeather() {
-        mViewModel.refreshWeather(mViewModel.lng, mViewModel.lat)
+    fun refreshWeather() {
+        viewModel.refreshWeather(viewModel.lng, viewModel.lat)
         swipeRefreshLayout.isRefreshing = true
     }
 
